@@ -66,6 +66,15 @@ class PenugasanTeknisiController extends Controller
         return view('teknisi.tugas', compact('penugasans'));
     }
 
+    public function show($id)
+    {
+        $tugas = PenugasanTeknisi::with(['laporan.perangkat', 'laporan.ruangan', 'laporan.jenisKerusakan', 'laporan.user'])
+            ->where('teknisi_id', Auth::id())
+            ->findOrFail($id);
+
+        return view('teknisi.show', compact('tugas'));
+    }
+
     public function index()
     {
         $penugasans = PenugasanTeknisi::with(['laporan.perangkat', 'teknisi'])

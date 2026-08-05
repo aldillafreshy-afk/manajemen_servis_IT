@@ -27,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     // Route tugas teknisi
     Route::get('/tugas-saya', [PenugasanTeknisiController::class, 'tugasSaya'])->name('teknisi.tugas');
+    Route::get('/tugas-saya/{id}', [PenugasanTeknisiController::class, 'show'])->name('teknisi.tugas.show');
     Route::get('/teknisi/dashboard', [PenugasanTeknisiController::class, 'dashboardTeknisi'])->name('teknisi.dashboard');
 });
 

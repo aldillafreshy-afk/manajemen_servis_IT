@@ -50,18 +50,24 @@
                                 </div>
                             </div>
 
-                            <div class="pt-3 border-t border-gray-200 flex justify-between items-center mt-2">
+                            <div class="pt-3 border-t border-gray-200 flex flex-wrap justify-between items-center gap-2 mt-2">
                                 <span class="text-xs text-gray-400">ID Laporan: #{{ $tugas->laporan_id }}</span>
-                                
-                                @if($tugas->status_penugasan != 'selesai')
-                                    <a href="{{ route('tindakan-perbaikan.create', ['penugasan_id' => $tugas->id]) }}" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-4 rounded shadow transition">
-                                        + Input Perbaikan
+
+                                <div class="flex items-center gap-2">
+                                    <a href="{{ route('teknisi.tugas.show', $tugas->id) }}" class="bg-gray-700 hover:bg-gray-800 text-white text-xs font-bold py-2 px-4 rounded shadow transition">
+                                        Detail
                                     </a>
-                                @else
-                                    <span class="text-xs font-bold text-green-600 flex items-center gap-1">
-                                        ✓ Selesai Dikerjakan
-                                    </span>
-                                @endif
+
+                                    @if($tugas->status_penugasan != 'selesai')
+                                        <a href="{{ route('tindakan-perbaikan.create', ['penugasan_id' => $tugas->id]) }}" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-4 rounded shadow transition">
+                                            + Input Perbaikan
+                                        </a>
+                                    @else
+                                        <span class="text-xs font-bold text-green-600 flex items-center gap-1">
+                                            ✓ Selesai Dikerjakan
+                                        </span>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     @empty
