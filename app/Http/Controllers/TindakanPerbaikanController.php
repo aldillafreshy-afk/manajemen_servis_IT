@@ -47,7 +47,7 @@ class TindakanPerbaikanController extends Controller
             'catatan_teknisi' => 'nullable|string',
         ]);
 
-        TindakanPerbaikan::create([
+        $tindakan = TindakanPerbaikan::create([
             'penugasan_id' => $request->penugasan_id,
             'deskripsi_tindakan' => $request->deskripsi_tindakan,
             'tanggal_mulai' => $request->tanggal_mulai,
@@ -57,24 +57,39 @@ class TindakanPerbaikanController extends Controller
             'catatan_teknisi' => $request->catatan_teknisi,
         ]);
 
+        $penugasan = PenugasanTeknisi::findOrFail($request->penugasan_id);
+        $laporan = $penugasan->laporan;
+        $catatanTeknisi = trim($request->catatan_teknisi ?? '');
+
         // Jika status hasil 'berhasil', otomatis selesaikan penugasan & laporan
         if ($request->status_hasil === 'berhasil') {
-            $penugasan = PenugasanTeknisi::findOrFail($request->penugasan_id);
             $penugasan->update(['status_penugasan' => 'selesai']);
 
-            if ($penugasan->laporan) {
-                $statusLama = $penugasan->laporan->status;
-                $penugasan->laporan->update(['status' => 'selesai']);
+            if ($laporan) {
+                $statusLama = $laporan->status;
+                $laporan->update(['status' => 'selesai']);
 
-                // Catat riwayat status selesai
+                $keterangan = 'Tindakan perbaikan berhasil diselesaikan oleh teknisi.';
+                if ($catatanTeknisi !== '') {
+                    $keterangan .= ' Catatan teknisi: ' . $catatanTeknisi;
+                }
+
                 RiwayatStatus::create([
-                    'laporan_id' => $penugasan->laporan_id,
+                    'laporan_id' => $laporan->id,
                     'user_id' => Auth::id(),
                     'status_lama' => $statusLama,
                     'status_baru' => 'selesai',
-                    'keterangan' => 'Tindakan perbaikan berhasil diselesaikan oleh teknisi.',
+                    'keterangan' => $keterangan,
                 ]);
             }
+        } elseif ($laporan && $catatanTeknisi !== '') {
+            RiwayatStatus::create([
+                'laporan_id' => $laporan->id,
+                'user_id' => Auth::id(),
+                'status_lama' => $laporan->status,
+                'status_baru' => $laporan->status,
+                'keterangan' => 'Catatan teknisi: ' . $catatanTeknisi,
+            ]);
         }
 
         return redirect()->route('tindakan-perbaikan.index')->with('success', 'Tindakan perbaikan berhasil dicatat!');
@@ -117,25 +132,51 @@ class TindakanPerbaikanController extends Controller
             'catatan_teknisi' => $request->catatan_teknisi,
         ]);
 
+        $catatanTeknisi = trim($request->catatan_teknisi ?? '');
+        $penugasan = PenugasanTeknisi::find($tindakan->penugasan_id);
+        $laporan = $penugasan?->laporan;
+
         // Jika diubah menjadi 'berhasil'
         if ($request->status_hasil === 'berhasil') {
-            $penugasan = PenugasanTeknisi::find($tindakan->penugasan_id);
             if ($penugasan) {
                 $penugasan->update(['status_penugasan' => 'selesai']);
 
-                if ($penugasan->laporan && $penugasan->laporan->status !== 'selesai') {
-                    $statusLama = $penugasan->laporan->status;
-                    $penugasan->laporan->update(['status' => 'selesai']);
+                if ($laporan) {
+                    if ($laporan->status !== 'selesai') {
+                        $statusLama = $laporan->status;
+                        $laporan->update(['status' => 'selesai']);
 
-                    RiwayatStatus::create([
-                        'laporan_id' => $penugasan->laporan_id,
-                        'user_id' => Auth::id(),
-                        'status_lama' => $statusLama,
-                        'status_baru' => 'selesai',
-                        'keterangan' => 'Tindakan perbaikan berhasil diperbarui ke status selesai.',
-                    ]);
+                        $keterangan = 'Tindakan perbaikan berhasil diperbarui ke status selesai.';
+                        if ($catatanTeknisi !== '') {
+                            $keterangan .= ' Catatan teknisi: ' . $catatanTeknisi;
+                        }
+
+                        RiwayatStatus::create([
+                            'laporan_id' => $laporan->id,
+                            'user_id' => Auth::id(),
+                            'status_lama' => $statusLama,
+                            'status_baru' => 'selesai',
+                            'keterangan' => $keterangan,
+                        ]);
+                    } elseif ($catatanTeknisi !== '') {
+                        RiwayatStatus::create([
+                            'laporan_id' => $laporan->id,
+                            'user_id' => Auth::id(),
+                            'status_lama' => $laporan->status,
+                            'status_baru' => $laporan->status,
+                            'keterangan' => 'Catatan teknisi: ' . $catatanTeknisi,
+                        ]);
+                    }
                 }
             }
+        } elseif ($laporan && $catatanTeknisi !== '') {
+            RiwayatStatus::create([
+                'laporan_id' => $laporan->id,
+                'user_id' => Auth::id(),
+                'status_lama' => $laporan->status,
+                'status_baru' => $laporan->status,
+                'keterangan' => 'Catatan teknisi: ' . $catatanTeknisi,
+            ]);
         }
 
         return redirect()->route('tindakan-perbaikan.index')->with('success', 'Tindakan perbaikan berhasil diperbarui!');
