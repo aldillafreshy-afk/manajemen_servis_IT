@@ -86,10 +86,22 @@
                     <div class="h-48 relative flex items-center justify-center">
                         <canvas id="adminDoughnutChart"></canvas>
                     </div>
+                    <!-- LEGEND DINAMIS DARI DATABASE -->
                     <div class="mt-4 text-xs space-y-1 text-gray-600 border-t pt-3">
-                        <div class="flex justify-between"><span><span class="inline-block w-2.5 h-2.5 rounded-full bg-blue-500 mr-1"></span> Hardware</span> <span>35%</span></div>
-                        <div class="flex justify-between"><span><span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 mr-1"></span> Software</span> <span>25%</span></div>
-                        <div class="flex justify-between"><span><span class="inline-block w-2.5 h-2.5 rounded-full bg-orange-400 mr-1"></span> Jaringan</span> <span>20%</span></div>
+                        @if(!empty($labelsKerusakan) && !empty($dataKerusakan) && $labelsKerusakan[0] !== 'Belum Ada Data')
+                            @foreach($labelsKerusakan as $index => $label)
+                                <div class="flex justify-between">
+                                    <span>
+                                        <span class="inline-block w-2.5 h-2.5 rounded-full mr-1" 
+                                            style="background-color: {{ $warnaKerusakan[$index % count($warnaKerusakan)] ?? '#3b82f6' }}"></span>
+                                        {{ $label }}
+                                    </span>
+                                    <span>{{ $dataKerusakan[$index] ?? 0 }}</span>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="text-center text-gray-400 py-2">Belum ada data kerusakan</div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -299,16 +311,20 @@
     ========================================================================================== -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+        @if($currentRole === 'admin')
             // 1. Grafik Admin - Line Chart Laporan per Bulan
             const ctxAdminLine = document.getElementById('adminLineChart')?.getContext('2d');
             if (ctxAdminLine) {
+                const bulanLabels = {!! json_encode($bulanLabels ?? ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']) !!};
+                const dataPerBulan = {!! json_encode($dataPerBulan ?? array_fill(0, 12, 0)) !!};
+                
                 new Chart(ctxAdminLine, {
                     type: 'line',
                     data: {
-                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+                        labels: bulanLabels,
                         datasets: [{
-                            label: 'Laporan',
-                            data: [15, 25, 20, 32, 30, 20, 40, 35, 39, 33, 50, 42],
+                            label: 'Jumlah Laporan',
+                            data: dataPerBulan,
                             borderColor: '#4f46e5',
                             backgroundColor: 'rgba(79, 70, 229, 0.1)',
                             borderWidth: 2,
@@ -316,25 +332,56 @@
                             fill: true
                         }]
                     },
-                    options: { responsive: true, maintainAspectRatio: false }
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { stepSize: 1 }
+                            }
+                        }
+                    }
                 });
             }
 
             // 2. Grafik Admin - Doughnut Jenis Kerusakan
             const ctxAdminDoughnut = document.getElementById('adminDoughnutChart')?.getContext('2d');
             if (ctxAdminDoughnut) {
+                const labelsKerusakan = {!! json_encode($labelsKerusakan ?? ['Hardware', 'Software', 'Jaringan']) !!};
+                const dataKerusakan = {!! json_encode($dataKerusakan ?? [0, 0, 0]) !!};
+                const warnaKerusakan = {!! json_encode($warnaKerusakan ?? ['#3b82f6', '#10b981', '#f97316']) !!};
+                
                 new Chart(ctxAdminDoughnut, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Hardware', 'Software', 'Jaringan'],
+                        labels: labelsKerusakan,
                         datasets: [{
-                            data: [35, 25, 20],
-                            backgroundColor: ['#3b82f6', '#10b981', '#f97316']
+                            data: dataKerusakan,
+                            backgroundColor: warnaKerusakan
                         }]
                     },
-                    options: { responsive: true, maintainAspectRatio: false, cutout: '70%' }
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        cutout: '70%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    boxWidth: 12,
+                                    padding: 10,
+                                    font: { size: 10 }
+                                }
+                            }
+                        }
+                    }
                 });
             }
+        @endif
 
             // 3. Grafik Teknisi - Doughnut Status Tugas Akurat dari Data
             const ctxTeknisiDoughnut = document.getElementById('teknisiDoughnutChart')?.getContext('2d');

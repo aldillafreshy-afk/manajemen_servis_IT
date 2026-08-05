@@ -11,6 +11,7 @@ use App\Http\Controllers\LaporanKerusakanController;
 use App\Http\Controllers\PenugasanTeknisiController;
 use App\Http\Controllers\TindakanPerbaikanController;
 use App\Http\Controllers\RiwayatStatusController;
+use App\Http\Controllers\DashboardController; // ← TAMBAHKAN INI
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('ruangan', RuanganController::class);
@@ -35,9 +36,10 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// ===== PERBAIKI INI =====
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
