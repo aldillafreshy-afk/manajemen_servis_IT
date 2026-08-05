@@ -85,6 +85,16 @@
                         </select>
                     </div>
 
+                    <div class="mb-3">
+                        <label for="foto" class="form-label">Foto Kerusakan</label><br>
+                            <input type="file" class="form-control @error('foto') is-invalid @enderror" 
+                                id="foto" name="foto" accept="image/*">
+                            @error('foto')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        <small class="text-muted">Format: JPEG, PNG, JPG. Maksimal 2MB</small>
+                    </div>
+
                     <!-- Tombol Aksi -->
                     <div class="flex justify-end space-x-3 pt-4 border-t border-gray-100">
                         <a href="{{ route('laporan.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold py-2.5 px-4 rounded shadow-sm">

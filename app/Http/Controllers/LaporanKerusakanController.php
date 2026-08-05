@@ -32,29 +32,36 @@ class LaporanKerusakanController extends Controller
 
     // Proses Simpan Laporan dari Pelapor
     public function store(Request $request)
-    {
-        $request->validate([
-            'ruangan_id' => 'required|exists:ruangans,id',
-            'perangkat_id' => 'required|exists:perangkats,id',
-            'jenis_kerusakan_id' => 'required|exists:jenis_kerusakans,id',
-            'deskripsi_kerusakan' => 'required|string',
-            'tingkat_urgensi' => 'nullable|string',
-        ]);
+{
+    $request->validate([
+        'ruangan_id' => 'required|exists:ruangans,id',
+        'perangkat_id' => 'required|exists:perangkats,id',
+        'jenis_kerusakan_id' => 'required|exists:jenis_kerusakans,id',
+        'deskripsi_kerusakan' => 'required|string',
+        'tingkat_urgensi' => 'nullable|string',
+        'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Tambahkan validasi foto
+    ]);
 
-        LaporanKerusakan::create([
-            'user_id' => Auth::id(), // Otomatis menyimpan ID Pelapor yang login
-            'ruangan_id' => $request->ruangan_id,
-            'perangkat_id' => $request->perangkat_id,
-            'jenis_kerusakan_id' => $request->jenis_kerusakan_id,
-            'deskripsi_kerusakan' => $request->deskripsi_kerusakan,
-            'tingkat_urgensi' => $request->tingkat_urgensi ?? 'sedang',
-            'status_laporan' => 'pending', // Status awal laporan
-            'tanggal_laporan' => now(),
-        ]);
-
-        // UBAH BARIS INI: Dari 'laporan_kerusakan.index' menjadi 'laporan.index'
-        return redirect()->route('laporan.index')->with('success', 'Laporan kerusakan berhasil dikirim!');
+    // Upload foto jika ada
+    $fotoPath = null;
+    if ($request->hasFile('foto')) {
+        $fotoPath = $request->file('foto')->store('laporan_foto', 'public');
     }
+
+    LaporanKerusakan::create([
+        'user_id' => Auth::id(),
+        'ruangan_id' => $request->ruangan_id,
+        'perangkat_id' => $request->perangkat_id,
+        'jenis_kerusakan_id' => $request->jenis_kerusakan_id,
+        'deskripsi_kerusakan' => $request->deskripsi_kerusakan,
+        'tingkat_urgensi' => $request->tingkat_urgensi ?? 'sedang',
+        'status_laporan' => 'pending',
+        'tanggal_laporan' => now(),
+        'foto' => $fotoPath, // Tambahkan field foto
+    ]);
+
+    return redirect()->route('laporan.index')->with('success', 'Laporan kerusakan berhasil dikirim!');
+}
 
     public function edit($id)
     {
