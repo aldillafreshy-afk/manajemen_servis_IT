@@ -11,7 +11,8 @@ use App\Http\Controllers\LaporanKerusakanController;
 use App\Http\Controllers\PenugasanTeknisiController;
 use App\Http\Controllers\TindakanPerbaikanController;
 use App\Http\Controllers\RiwayatStatusController;
-use App\Http\Controllers\DashboardController; // ← TAMBAHKAN INI
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LaporanPdfController;
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('ruangan', RuanganController::class);
@@ -23,6 +24,12 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('penugasan', PenugasanTeknisiController::class);
     Route::resource('tindakan-perbaikan', TindakanPerbaikanController::class);
     Route::resource('riwayat-status', RiwayatStatusController::class);
+
+    Route::get('/laporan/{id}/pdf', [LaporanPdfController::class, 'generatePdf'])
+        ->name('laporan.pdf');
+    
+    Route::get('/laporan/{id}/pdf-stream', [LaporanPdfController::class, 'streamPdf'])
+        ->name('laporan.pdf.stream');
 });
 
 // Route::middleware(['auth'])->group(function () {

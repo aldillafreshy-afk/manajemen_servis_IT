@@ -42,4 +42,32 @@ class LaporanKerusakan extends Model
     {
         return $this->belongsTo(JenisKerusakan::class, 'jenis_kerusakan_id');
     }
+
+    // ===== TAMBAHKAN RELASI INI =====
+    /**
+     * Relasi ke Penugasan Teknisi
+     * Satu laporan bisa memiliki banyak penugasan
+     */
+    public function penugasanTeknisi()
+    {
+        return $this->hasMany(PenugasanTeknisi::class, 'laporan_id');
+    }
+
+    /**
+     * Relasi ke Tindakan Perbaikan melalui Penugasan
+     * Mengambil semua tindakan perbaikan dari semua penugasan laporan ini
+     */
+    public function tindakanPerbaikan()
+    {
+        return $this->hasManyThrough(
+            TindakanPerbaikan::class,
+            PenugasanTeknisi::class,
+            'laporan_id', // Foreign key di penugasan_teknisis
+            'penugasan_id', // Foreign key di tindakan_perbaikans
+            'id', // Local key di laporan_kerusakans
+            'id' // Local key di penugasan_teknisis
+        );
+    }
+
+    
 }

@@ -72,6 +72,16 @@
                                 <td class="border border-gray-300 px-3 py-2 text-center">
                                     <a href="{{ route('laporan.show', $item->id) }}" class="text-blue-600 hover:underline mr-2">
                                         <i class="fas fa-eye"></i> Detail </a>
+
+                                    <!-- Tombol PDF -->
+                                    <a href="{{ route('laporan.pdf', $item->id) }}" 
+                                    class="text-red-600 hover:text-red-800" 
+                                    title="Download PDF">
+                                        <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                        </svg>
+                                        PDF
+                                    </a>
                                     
                                     {{-- <a href="{{ route('laporan.edit', $item->id) }}" class="text-yellow-600 hover:underline mr-2">Edit</a> --}}
                                     <form action="{{ route('laporan.destroy', $item->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus laporan ini?')">

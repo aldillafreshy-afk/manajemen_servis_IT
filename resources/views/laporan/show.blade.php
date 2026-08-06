@@ -128,8 +128,8 @@
                 @endif
 
                 <!-- Tombol Aksi -->
-                {{-- <div class="mt-6 border-t pt-6 flex justify-end space-x-3">
-                    <a href="{{ route('laporan.edit', $laporan->id) }}" 
+                <div class="mt-6 border-t pt-6 flex justify-end space-x-3">
+                    {{-- <a href="{{ route('laporan.edit', $laporan->id) }}" 
                        class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded text-sm">
                         Edit Laporan
                     </a>
@@ -142,8 +142,30 @@
                         <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-sm">
                             Hapus Laporan
                         </button>
-                    </form>
-                </div> --}}
+                    </form> --}}
+
+                    <div class="flex gap-2">
+                        <!-- Tombol Download PDF -->
+                        <a href="{{ route('laporan.pdf', $laporan->id) }}" 
+                        class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow transition flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            Download PDF
+                        </a>
+                        
+                        <!-- Tombol Preview PDF -->
+                        <a href="{{ route('laporan.pdf.stream', $laporan->id) }}" 
+                        target="_blank"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow transition flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                            Preview PDF
+                        </a>
+                    </div>
+                </div>
 
             </div>
         </div>

@@ -51,7 +51,7 @@
                 </div>
 
                 <div class="mt-6 flex flex-wrap gap-3 items-center">
-                    <a href="{{ route('teknisi.tugas') }}" class="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
+                    <a href="{{ route('penugasan.index') }}" class="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
                         Kembali
                     </a>
                     @if($tugas->status_penugasan != 'selesai')
