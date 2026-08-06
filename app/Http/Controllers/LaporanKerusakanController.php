@@ -55,7 +55,7 @@ class LaporanKerusakanController extends Controller
         'jenis_kerusakan_id' => $request->jenis_kerusakan_id,
         'deskripsi_kerusakan' => $request->deskripsi_kerusakan,
         'tingkat_urgensi' => $request->tingkat_urgensi ?? 'sedang',
-        'status_laporan' => 'pending',
+        'status_laporan' => 'menunggu',
         'tanggal_laporan' => now(),
         'foto' => $fotoPath, // Tambahkan field foto
     ]);

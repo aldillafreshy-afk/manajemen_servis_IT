@@ -19,7 +19,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('laporan.store') }}" method="POST" class="space-y-6">
+                <form action="{{ route('laporan.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
 
                     <!-- 1. Pilih Ruangan -->
