@@ -21,6 +21,21 @@ class LaporanKerusakanController extends Controller
         return view('laporan.index', compact('laporans'));
     }
 
+    public function show($id)
+    {
+        // Ambil data laporan beserta relasi yang dibutuhkan
+        $laporan = LaporanKerusakan::with(['user', 'perangkat', 'ruangan', 'jenisKerusakan'])
+            ->findOrFail($id);
+        
+        // Ambil riwayat status jika ada
+        $riwayatStatus = RiwayatStatus::where('laporan_id', $id)
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        return view('laporan.show', compact('laporan', 'riwayatStatus'));
+    }
+    
     public function create()
     {
         $ruangans = Ruangan::all();

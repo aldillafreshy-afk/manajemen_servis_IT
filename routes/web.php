@@ -25,11 +25,24 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('riwayat-status', RiwayatStatusController::class);
 });
 
+// Route::middleware(['auth'])->group(function () {
+//     // Route tugas teknisi
+//     Route::get('/tugas-saya', [PenugasanTeknisiController::class, 'tugasSaya'])->name('teknisi.tugas');
+//     Route::get('/tugas-saya/{id}', [PenugasanTeknisiController::class, 'show'])->name('teknisi.tugas.show');
+//     Route::get('/teknisi/dashboard', [PenugasanTeknisiController::class, 'dashboardTeknisi'])->name('teknisi.dashboard');
+// });
+
 Route::middleware(['auth'])->group(function () {
-    // Route tugas teknisi
-    Route::get('/tugas-saya', [PenugasanTeknisiController::class, 'tugasSaya'])->name('teknisi.tugas');
-    Route::get('/tugas-saya/{id}', [PenugasanTeknisiController::class, 'show'])->name('teknisi.tugas.show');
-    Route::get('/teknisi/dashboard', [PenugasanTeknisiController::class, 'dashboardTeknisi'])->name('teknisi.dashboard');
+    // Route tugas teknisis
+
+    Route::get('/teknisi/dashboard', [PenugasanTeknisiController::class, 'dashboardTeknisi'])
+        ->name('teknisi.dashboard');
+    
+    Route::get('/tugas-saya', [PenugasanTeknisiController::class, 'tugasSaya'])
+        ->name('teknisi.tugas');
+    
+    Route::get('/tugas-saya/{id}', [PenugasanTeknisiController::class, 'show'])
+        ->name('teknisi.tugas.show');
 });
 
 Route::get('/', function () {

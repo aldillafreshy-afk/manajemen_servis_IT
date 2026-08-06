@@ -70,7 +70,10 @@
                                     </span>
                                 </td>
                                 <td class="border border-gray-300 px-3 py-2 text-center">
-                                    <a href="{{ route('laporan.edit', $item->id) }}" class="text-yellow-600 hover:underline mr-2">Edit</a>
+                                    <a href="{{ route('laporan.show', $item->id) }}" class="text-blue-600 hover:underline mr-2">
+                                        <i class="fas fa-eye"></i> Detail </a>
+                                    
+                                    {{-- <a href="{{ route('laporan.edit', $item->id) }}" class="text-yellow-600 hover:underline mr-2">Edit</a> --}}
                                     <form action="{{ route('laporan.destroy', $item->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus laporan ini?')">
                                         @csrf
                                         @method('DELETE')
