@@ -30,4 +30,15 @@ class PenugasanTeknisi extends Model
     {
         return $this->belongsTo(User::class, 'teknisi_id');
     }
+
+    // ===== TAMBAHKAN RELASI INI =====
+    /**
+     * Relasi ke Tindakan Perbaikan
+     * Satu penugasan bisa memiliki banyak tindakan perbaikan
+     */
+    public function tindakanPerbaikan()
+    {
+        return $this->hasMany(TindakanPerbaikan::class, 'penugasan_id');
+    }
+    
 }
