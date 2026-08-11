@@ -16,12 +16,53 @@
                 @endif
                 
                 @if(strtolower(auth()->user()->role->name ?? auth()->user()->role->nama ?? '') == 'admin')
-                <div class="mb-4">
+                <div class="mb-4 flex flex-col md:flex-row gap-4 justify-between items-start">
                     <a href="{{ route('penugasan.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         + Tugaskan Teknisi
                     </a>
                 </div>
                 @endif
+
+                <form method="GET" action="{{ route('penugasan.index') }}" class="mb-6 grid gap-4 md:grid-cols-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Cari</label>
+                        <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari teknisi, perangkat, ruangan atau status"
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Status Penugasan</label>
+                        <select name="status_penugasan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <option value="">Semua Status</option>
+                            @foreach($statusOptions as $status)
+                                <option value="{{ $status }}" {{ request('status_penugasan') == $status ? 'selected' : '' }}>
+                                    {{ ucfirst($status) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Tanggal Awal</label>
+                            <input type="date" name="tanggal_awal" value="{{ request('tanggal_awal') }}"
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Tanggal Akhir</label>
+                            <input type="date" name="tanggal_akhir" value="{{ request('tanggal_akhir') }}"
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
+                                Filter
+                            </button>
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <a href="{{ route('penugasan.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded w-full text-center">
+                                Reset
+                            </a>
+                        </div>
+                    </div>
+                </form>
 
                 <table class="min-w-full border-collapse border border-gray-200">
                     <thead>

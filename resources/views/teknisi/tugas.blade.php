@@ -20,6 +20,47 @@
                     </div>
                 @endif
 
+                <form method="GET" action="{{ route('teknisi.tugas') }}" class="mb-6 grid gap-4 md:grid-cols-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Cari tugas / perangkat</label>
+                        <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari deskripsi, perangkat, ruangan"
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Status Penugasan</label>
+                        <select name="status_penugasan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <option value="">Semua Status</option>
+                            @foreach($statusOptions as $status)
+                                <option value="{{ $status }}" {{ request('status_penugasan') == $status ? 'selected' : '' }}>
+                                    {{ ucfirst($status) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Tanggal Awal</label>
+                            <input type="date" name="tanggal_awal" value="{{ request('tanggal_awal') }}"
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Tanggal Akhir</label>
+                            <input type="date" name="tanggal_akhir" value="{{ request('tanggal_akhir') }}"
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
+                                Filter
+                            </button>
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <a href="{{ route('teknisi.tugas') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded w-full text-center">
+                                Reset
+                            </a>
+                        </div>
+                    </div>
+                </form>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     @forelse($penugasans as $tugas)
                         <div class="border rounded-lg p-5 shadow-sm hover:shadow-md transition bg-gray-50 border-gray-200 flex flex-col justify-between">

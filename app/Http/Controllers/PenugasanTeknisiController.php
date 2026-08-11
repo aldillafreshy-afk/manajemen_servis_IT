@@ -55,15 +55,40 @@ class PenugasanTeknisiController extends Controller
         ));
     }
 
-    public function tugasSaya()
+    public function tugasSaya(Request $request)
     {
-        // Ambil penugasan khusus untuk teknisi yang sedang login
-        $penugasans = PenugasanTeknisi::with(['laporan.perangkat', 'laporan.ruangan', 'laporan.jenisKerusakan'])
-            ->where('teknisi_id', Auth::id())
-            ->latest()
-            ->paginate(10);
+        $query = PenugasanTeknisi::with(['laporan.perangkat', 'laporan.ruangan', 'laporan.jenisKerusakan'])
+            ->where('teknisi_id', Auth::id());
 
-        return view('teknisi.tugas', compact('penugasans'));
+        if ($request->filled('q')) {
+            $search = $request->q;
+            $query->where(function ($q) use ($search) {
+                $q->where('status_penugasan', 'like', "%{$search}%")
+                    ->orWhereHas('laporan', function ($q2) use ($search) {
+                        $q2->where('deskripsi_kerusakan', 'like', "%{$search}%")
+                            ->orWhereHas('perangkat', fn($q3) => $q3->where('nama_perangkat', 'like', "%{$search}%"))
+                            ->orWhereHas('ruangan', fn($q3) => $q3->where('nama_ruangan', 'like', "%{$search}%"))
+                            ->orWhereHas('jenisKerusakan', fn($q3) => $q3->where('nama_kerusakan', 'like', "%{$search}%"));
+                    });
+        });
+        }
+
+        if ($request->filled('status_penugasan')) {
+            $query->where('status_penugasan', $request->status_penugasan);
+        }
+
+        if ($request->filled('tanggal_awal')) {
+            $query->whereDate('tanggal_penugasan', '>=', $request->tanggal_awal);
+        }
+
+        if ($request->filled('tanggal_akhir')) {
+            $query->whereDate('tanggal_penugasan', '<=', $request->tanggal_akhir);
+        }
+
+        $penugasans = $query->latest()->paginate(10)->withQueryString();
+        $statusOptions = ['ditugaskan', 'diproses', 'selesai', 'dibatalkan'];
+
+        return view('teknisi.tugas', compact('penugasans', 'statusOptions'));
     }
 
     public function show($id)
@@ -75,13 +100,40 @@ class PenugasanTeknisiController extends Controller
         return view('teknisi.show', compact('tugas'));
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $penugasans = PenugasanTeknisi::with(['laporan.perangkat', 'teknisi'])
-            ->latest()
-            ->paginate(10);
+        $query = PenugasanTeknisi::with(['laporan.perangkat', 'laporan.ruangan', 'laporan.jenisKerusakan', 'teknisi']);
 
-        return view('penugasan.index', compact('penugasans'));
+        if ($request->filled('q')) {
+            $search = $request->q;
+            $query->where(function ($q) use ($search) {
+                $q->where('status_penugasan', 'like', "%{$search}%")
+                    ->orWhereHas('teknisi', fn($q2) => $q2->where('name', 'like', "%{$search}%"))
+                    ->orWhereHas('laporan', function ($q2) use ($search) {
+                        $q2->where('deskripsi_kerusakan', 'like', "%{$search}%")
+                            ->orWhereHas('perangkat', fn($q3) => $q3->where('nama_perangkat', 'like', "%{$search}%"))
+                            ->orWhereHas('ruangan', fn($q3) => $q3->where('nama_ruangan', 'like', "%{$search}%"))
+                            ->orWhereHas('jenisKerusakan', fn($q3) => $q3->where('nama_kerusakan', 'like', "%{$search}%"));
+                    });
+        });
+        }
+
+        if ($request->filled('status_penugasan')) {
+            $query->where('status_penugasan', $request->status_penugasan);
+        }
+
+        if ($request->filled('tanggal_awal')) {
+            $query->whereDate('tanggal_penugasan', '>=', $request->tanggal_awal);
+        }
+
+        if ($request->filled('tanggal_akhir')) {
+            $query->whereDate('tanggal_penugasan', '<=', $request->tanggal_akhir);
+        }
+
+        $penugasans = $query->latest()->paginate(10)->withQueryString();
+        $statusOptions = ['ditugaskan', 'diproses', 'selesai', 'dibatalkan'];
+
+        return view('penugasan.index', compact('penugasans', 'statusOptions'));
     }
 
     public function create()

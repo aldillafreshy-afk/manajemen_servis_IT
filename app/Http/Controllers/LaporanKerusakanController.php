@@ -12,13 +12,68 @@ use Illuminate\Support\Facades\Auth;
 
 class LaporanKerusakanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $laporans = LaporanKerusakan::with(['user', 'perangkat', 'ruangan', 'jenisKerusakan'])
-            ->latest()
-            ->paginate(10);
+        $role = Auth::user()->role;
+        $roleName = strtolower(optional($role)->nama ?? optional($role)->name ?? '');
 
-        return view('laporan.index', compact('laporans'));
+        $query = LaporanKerusakan::with(['user', 'perangkat', 'ruangan', 'jenisKerusakan']);
+
+        if ($roleName === 'teknisi') {
+            $query->whereHas('penugasanTeknisi', function ($q) {
+                $q->where('teknisi_id', Auth::id());
+            });
+        } elseif ($roleName !== 'admin') {
+            $query->where('user_id', Auth::id());
+        }
+
+        if ($request->filled('q')) {
+            $q = $request->q;
+            $query->where(function ($q2) use ($q) {
+                $q2->where('deskripsi_kerusakan', 'like', "%{$q}%")
+                    ->orWhere('status', 'like', "%{$q}%")
+                    ->orWhere('tingkat_urgensi', 'like', "%{$q}%")
+                    ->orWhereHas('user', fn($q3) => $q3->where('name', 'like', "%{$q}%"))
+                    ->orWhereHas('perangkat', fn($q3) => $q3->where('nama_perangkat', 'like', "%{$q}%"))
+                    ->orWhereHas('ruangan', fn($q3) => $q3->where('nama_ruangan', 'like', "%{$q}%"))
+                    ->orWhereHas('jenisKerusakan', fn($q3) => $q3->where('nama_kerusakan', 'like', "%{$q}%"));
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('tingkat_urgensi')) {
+            $query->where('tingkat_urgensi', $request->tingkat_urgensi);
+        }
+
+        if ($request->filled('perangkat_id')) {
+            $query->where('perangkat_id', $request->perangkat_id);
+        }
+
+        if ($request->filled('ruangan_id')) {
+            $query->where('ruangan_id', $request->ruangan_id);
+        }
+
+        if ($request->filled('jenis_kerusakan_id')) {
+            $query->where('jenis_kerusakan_id', $request->jenis_kerusakan_id);
+        }
+
+        if ($request->filled('tanggal_awal')) {
+            $query->whereDate('tanggal_lapor', '>=', $request->tanggal_awal);
+        }
+
+        if ($request->filled('tanggal_akhir')) {
+            $query->whereDate('tanggal_lapor', '<=', $request->tanggal_akhir);
+        }
+
+        $laporans = $query->latest()->paginate(10)->withQueryString();
+        $ruangans = Ruangan::all();
+        $jenisKerusakans = JenisKerusakan::all();
+        $perangkats = Perangkat::all();
+
+        return view('laporan.index', compact('laporans', 'ruangans', 'jenisKerusakans', 'perangkats'));
     }
 
     public function show($id)
