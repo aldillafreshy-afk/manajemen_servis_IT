@@ -13,6 +13,7 @@ use App\Http\Controllers\TindakanPerbaikanController;
 use App\Http\Controllers\RiwayatStatusController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LaporanPdfController;
+use App\Http\Controllers\RekapLaporanController;
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('ruangan', RuanganController::class);
@@ -30,6 +31,14 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/laporan/{id}/pdf-stream', [LaporanPdfController::class, 'streamPdf'])
         ->name('laporan.pdf.stream');
+
+    // ===== TAMBAHKAN ROUTE REKAP PDF =====
+    Route::get('/rekap-laporan/pdf', [RekapLaporanController::class, 'generatePdf'])
+        ->name('rekap.laporan.pdf');
+    Route::get('/rekap-laporan/pdf-stream', [RekapLaporanController::class, 'streamPdf'])
+        ->name('rekap.laporan.pdf.stream');
+    Route::get('/rekap-laporan', [RekapLaporanController::class, 'index'])
+        ->name('rekap.laporan.index');
 });
 
 // Route::middleware(['auth'])->group(function () {

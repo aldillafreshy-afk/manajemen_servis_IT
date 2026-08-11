@@ -66,6 +66,9 @@
                             <a href="{{ route('riwayat-status.index') }}" class="block px-3 py-2 rounded-lg transition {{ request()->routeIs('riwayat-status.*') ? 'bg-blue-600/30 text-blue-400 font-semibold border-l-4 border-blue-500 pl-2' : 'text-gray-300 hover:bg-slate-800 hover:text-white' }}">
                                 Riwayat Servis
                             </a>
+                            <a href="{{ route('rekap.laporan.index') }}" class="block px-3 py-2 rounded-lg transition {{ request()->routeIs('rekap.laporan.*') ? 'bg-blue-600/30 text-blue-400 font-semibold border-l-4 border-blue-500 pl-2' : 'text-gray-300 hover:bg-slate-800 hover:text-white' }}">
+                                <i class="fas fa-file-alt"></i> Rekap Laporan
+                            </a>
                         </div>
                     </div>
 
