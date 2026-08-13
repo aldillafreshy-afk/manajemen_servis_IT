@@ -110,4 +110,53 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Cascading dropdown: Perangkat berdasarkan Ruangan
+        const ruanganSelect = document.getElementById('ruangan_id');
+        const perangkatSelect = document.getElementById('perangkat_id');
+        const perangkatValue = document.getElementById('perangkat_id').value;
+
+        // Function untuk fetch perangkat berdasarkan ruangan
+        function loadPerangkatByRuangan(ruanganId) {
+            if (!ruanganId) {
+                // Reset dropdown jika tidak ada ruangan yang dipilih
+                perangkatSelect.innerHTML = '<option value="">-- Pilih Perangkat --</option>';
+                return;
+            }
+
+            // Fetch perangkat dari API
+            fetch(`/api/perangkat-by-ruangan/${ruanganId}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Clear existing options
+                    perangkatSelect.innerHTML = '<option value="">-- Pilih Perangkat --</option>';
+                    
+                    // Add new options
+                    data.forEach(perangkat => {
+                        const option = document.createElement('option');
+                        option.value = perangkat.id;
+                        option.textContent = `${perangkat.kode_perangkat} - ${perangkat.nama_perangkat}`;
+                        
+                        // Set as selected jika sesuai dengan old value
+                        if (perangkat.id == perangkatValue) {
+                            option.selected = true;
+                        }
+                        
+                        perangkatSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error loading perangkat:', error));
+        }
+
+        // Load perangkat saat halaman pertama kali dibuka (jika ada ruangan yang sudah dipilih)
+        if (ruanganSelect.value) {
+            loadPerangkatByRuangan(ruanganSelect.value);
+        }
+
+        // Load perangkat ketika user mengubah pilihan ruangan
+        ruanganSelect.addEventListener('change', function() {
+            loadPerangkatByRuangan(this.value);
+        });
+    </script>
 </x-app-layout>

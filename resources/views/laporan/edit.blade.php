@@ -25,7 +25,7 @@
 
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Pilih Perangkat</label>
-                        <select name="perangkat_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        <select id="perangkat_id" name="perangkat_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                             @foreach($perangkats as $p)
                                 <option value="{{ $p->id }}" {{ old('perangkat_id', $laporan->perangkat_id) == $p->id ? 'selected' : '' }}>
                                     {{ $p->nama_perangkat }} ({{ $p->kode_perangkat }})
@@ -36,7 +36,7 @@
 
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Lokasi Ruangan</label>
-                        <select name="ruangan_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        <select id="ruangan_id" name="ruangan_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                             @foreach($ruangans as $r)
                                 <option value="{{ $r->id }}" {{ old('ruangan_id', $laporan->ruangan_id) == $r->id ? 'selected' : '' }}>
                                     {{ $r->nama_ruangan }}
@@ -90,4 +90,53 @@
             </div>
         </div>
     </div>
-</x-app-layout>S
+
+    <script>
+        // Cascading dropdown: Perangkat berdasarkan Ruangan
+        const ruanganSelect = document.getElementById('ruangan_id');
+        const perangkatSelect = document.getElementById('perangkat_id');
+        const perangkatValue = document.getElementById('perangkat_id').value;
+
+        // Function untuk fetch perangkat berdasarkan ruangan
+        function loadPerangkatByRuangan(ruanganId) {
+            if (!ruanganId) {
+                // Reset dropdown jika tidak ada ruangan yang dipilih
+                perangkatSelect.innerHTML = '<option value="">-- Pilih Perangkat --</option>';
+                return;
+            }
+
+            // Fetch perangkat dari API
+            fetch(`/api/perangkat-by-ruangan/${ruanganId}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Clear existing options
+                    perangkatSelect.innerHTML = '<option value="">-- Pilih Perangkat --</option>';
+                    
+                    // Add new options
+                    data.forEach(perangkat => {
+                        const option = document.createElement('option');
+                        option.value = perangkat.id;
+                        option.textContent = `${perangkat.kode_perangkat} - ${perangkat.nama_perangkat}`;
+                        
+                        // Set as selected jika sesuai dengan old value
+                        if (perangkat.id == perangkatValue) {
+                            option.selected = true;
+                        }
+                        
+                        perangkatSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error loading perangkat:', error));
+        }
+
+        // Load perangkat saat halaman pertama kali dibuka (jika ada ruangan yang sudah dipilih)
+        if (ruanganSelect.value) {
+            loadPerangkatByRuangan(ruanganSelect.value);
+        }
+
+        // Load perangkat ketika user mengubah pilihan ruangan
+        ruanganSelect.addEventListener('change', function() {
+            loadPerangkatByRuangan(this.value);
+        });
+    </script>
+</x-app-layout>

@@ -193,4 +193,14 @@ class LaporanKerusakanController extends Controller
 
         return redirect()->route('laporan.index')->with('success', 'Laporan kerusakan berhasil dihapus!');
     }
+
+    // API: Ambil perangkat berdasarkan ruangan
+    public function getPerangkatByRuangan($ruangan_id)
+    {
+        $perangkats = Perangkat::where('ruangan_id', $ruangan_id)
+            ->orderBy('nama_perangkat')
+            ->get(['id', 'kode_perangkat', 'nama_perangkat']);
+
+        return response()->json($perangkats);
+    }
 }

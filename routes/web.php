@@ -26,6 +26,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('tindakan-perbaikan', TindakanPerbaikanController::class);
     Route::resource('riwayat-status', RiwayatStatusController::class);
 
+    // API: Get perangkat by ruangan
+    Route::get('/api/perangkat-by-ruangan/{ruangan_id}', [LaporanKerusakanController::class, 'getPerangkatByRuangan'])
+        ->name('api.perangkat.by-ruangan');
+
     Route::get('/laporan/{id}/pdf', [LaporanPdfController::class, 'generatePdf'])
         ->name('laporan.pdf');
     
