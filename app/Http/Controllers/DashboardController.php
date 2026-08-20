@@ -68,7 +68,7 @@ class DashboardController extends Controller
                 foreach ($jenisKerusakan as $item) {
                     $jenis = JenisKerusakan::find($item->jenis_kerusakan_id);
                     if ($jenis) {
-                        $labelsKerusakan[] = $jenis->nama;
+                        $labelsKerusakan[] = $jenis->nama_kerusakan;
                         $dataKerusakan[] = $item->total;
                     }
                 }
