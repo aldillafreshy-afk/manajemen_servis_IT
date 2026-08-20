@@ -1,58 +1,112 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+=========== Sistem Manajemen Servis Perangkat IT ===========
+========================= FIXLY ============================
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<!-- README Made by: aldilla_Freshy
+Group Member : annisa_maharani_azzahra
+                raihan_aqil_masti -->
 
-## About Laravel
+<=========== Deskripsi Singkat ===========>
+aplikasi ini merupakan sistem pelaporan kerusakan yang di gunakan untuk mencatat, mengelola, dan memantau Status perangkat IT di sekolah. website ini juga di desain untuk menampung seluruh data perangkat it yang ada di sekolah untuk memudahkan interaksi antar pengguna dengan teknisi.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<< TEKNOLOGI YANG DI GUNAKAN >>
+1. laravel (v13)
+2. PHP (v8.4.24)
+3. MySQL (v8.4.3)
+4. Tailwind CSS
+5. JavaScript
+6. Composer (v2.8.4)
+7. Node.js & NPM
+8. Git
+9. laragon (v8.3.0)
+10. Visual Studio Code
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<< PERSYARATAN UMUM >>
+untuk menjalankan program ini. anda harus memastikan hal-hal berikut ini:
+1. pastikan perangkat anda memiliki : PHP , Composer , Node.js & NPM , Mysql , git 
+2. pastikan php anda berada di versi 8.4. jika berada di bawahnya. akan terdapat error terhadap rendahnya versi php.
+3. pastikan juga versi node anda berada di versi v22.12.0
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+<< CARA INSTALASI>>
 
-## Learning Laravel
+1. Clone Repository
+Buka terminal kemudian jalankan:
+https://github.com/aldillafreshy-afk/manajemen_servis_IT/tree/fix_test
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Masuk ke folder project: cd manajemen_servis_it
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. Install Dependency Laravel
+Jalankan:
+composer install
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+3. Install Dependency Frontend
+Jalankan:
+npm install
 
-## Agentic Development
+4. Buat File .env
+Salin file .env.example menjadi .env.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Linux/macOS:
+cp .env.example .env
 
-```bash
-composer require laravel/boost --dev
+Windows:
+copy .env.example .env
 
-php artisan boost:install
-```
+5. Konfigurasi Database
+Buka file .env kemudian sesuaikan konfigurasi database:
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=servis_it
+DB_USERNAME=root
+DB_PASSWORD=
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+6. Generate Application Key
+Jalankan:
+php artisan key:generate
 
-## Contributing
+7. Jalankan Migration
+Untuk membuat tabel database:
+php artisan migrate --seed
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+8. Jalankan Vite
+Buka terminal baru dan jalankan:
+npm run dev
 
-## Code of Conduct
+9. Jalankan Laravel
+Buka terminal baru kemudian jalankan:
+php artisan serve
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Setelah itu buka browser dan akses:
+http://127.0.0.1:8000
 
-## Security Vulnerabilities
+<< AKUN DEMO UNTUK PENGEMBANGAN WEBSITE >>
+1.  name: admin
+    email: admin@gmail.com
+    pass: admin123
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+2.  name: teknisi
+    email: teknisi@gmail.com
+    pass: teknisi123
 
-## License
+3.  name: pelapor
+    email: pelapor@gmail.com
+    pass: pelapor123
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+👥 Role User
+Project memiliki beberapa role pengguna.
+
+Admin
+Admin memiliki akses untuk mengelola data dan manajemen role akun. serta melakukan penugasan dan menonaktifkan teknisi. 
+
+Teknisi
+Teknisi memiliki akses untuk melakukan perubahan status dan perbaikan pada perangkat it. serta, dapat melakukan penambahan data perangkat it
+
+Pelapor
+pelapor memiliki akses untuk membuat laporan kerusakan pada perangkat it. melihat status pengerjaannya. dan juga melihat riwayat pengerjaan teknisi
+
+⚠️ Catatan
+Jangan mengupload file .env ke repository karena file tersebut dapat berisi informasi konfigurasi dan kredensial database.
+Gunakan .env.example sebagai template konfigurasi.
+
+📄 License
+Project ini dibuat untuk keperluan pembelajaran/pengembangan dan dapat disesuaikan dengan kebutuhan.
