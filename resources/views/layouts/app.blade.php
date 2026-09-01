@@ -7,10 +7,17 @@
 
     <title>{{ config('app.name', 'Fixly') }}</title>
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])    <script defer src=\"https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js\"></script>    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="font-sans antialiased bg-gray-100 text-gray-800">
+<body class="font-sans antialiased bg-gray-100 text-gray-800" x-data="{ sidebarOpen: false }">
+    <!-- Overlay Backdrop untuk Mobile -->
+    <div 
+        x-show="sidebarOpen" 
+        @click="sidebarOpen = false"
+        class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+        x-transition.opacity
+    ></div>
+
     <div class="min-h-screen flex">
         
         <!-- PANGGIL SIDEBAR DI SINI -->
@@ -19,10 +26,22 @@
         <!-- MAIN CONTENT AREA -->
         <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- Topbar Nav Header -->
-            <header class="bg-white shadow-sm h-16 flex items-center justify-between px-8 border-b border-gray-100">
-                <div>
-                    <h1 class="text-xl font-bold text-gray-900">Dashboard</h1>
-                    <p class="text-xs text-gray-500">Selamat datang di Sistem Manajemen Servis dan Perbaikan Perangkat IT</p>
+            <header class="bg-white shadow-sm h-16 flex items-center justify-between px-4 sm:px-8 border-b border-gray-100">
+                <!-- Hamburger Button (Mobile Only) + Title -->
+                <div class="flex items-center space-x-4">
+                    <button 
+                        @click="sidebarOpen = !sidebarOpen"
+                        class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition"
+                        aria-label="Toggle sidebar"
+                    >
+                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    <div>
+                        <h1 class="text-lg sm:text-xl font-bold text-gray-900">Dashboard</h1>
+                        <p class="hidden sm:block text-xs text-gray-500">Selamat datang di Sistem Manajemen Servis dan Perbaikan Perangkat IT</p>
+                    </div>
                 </div>
 
                 <!-- Bagian User Profile Topbar -->
@@ -47,7 +66,7 @@
             </header>
 
             <!-- Halaman Konten Dinamis -->
-            <main class="flex-1 overflow-y-auto p-8">
+            <main class=\"flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8\">
                 {{ $slot }}
             </main>
         </div>

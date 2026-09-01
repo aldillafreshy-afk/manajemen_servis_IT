@@ -1,12 +1,15 @@
 =========== Sistem Manajemen Servis Perangkat IT ===========
 ========================= FIXLY ============================
 
-<!-- README Made by: aldilla_Freshy
-Group Member : annisa_maharani_azzahra
-                raihan_aqil_masti -->
+README Made by: aldilla_Freshy
+
+DEVELOPER : 
+aldilla_freshy -> Database Architect, Web Developer
+annisa_maharani_azzahra ->  Web Architect, Backend, Frontend
+raihan_aqil_masti -> Editor, Frontend
 
 <=========== Deskripsi Singkat ===========>
-aplikasi ini merupakan sistem pelaporan kerusakan yang di gunakan untuk mencatat, mengelola, dan memantau Status perangkat IT di sekolah. website ini juga di desain untuk menampung seluruh data perangkat it yang ada di sekolah untuk memudahkan interaksi antar pengguna dengan teknisi.
+aplikasi ini merupakan sistem pelaporan kerusakan yang digunakan untuk mencatat, mengelola, dan memantau Status perangkat IT di sekolah. website ini juga di desain untuk menampung seluruh data perangkat it yang ada di sekolah untuk memudahkan interaksi antar pengguna dengan teknisi.
 
 << TEKNOLOGI YANG DI GUNAKAN >>
 1. laravel (v13)

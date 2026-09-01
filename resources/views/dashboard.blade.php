@@ -362,8 +362,8 @@
                                 <tr class="border-b hover:bg-gray-50">
                                     <td class="py-3 px-4 font-semibold text-gray-900">{{ $lap->no_laporan ?? 'LP-'.$lap->id }}</td>
                                     <td class="py-3 px-4">{{ $lap->created_at ? $lap->created_at->format('d M Y') : '-' }}</td>
-                                    <td class="py-3 px-4">{{ $lap->nama_perangkat ?? '-' }}</td>
-                                    <td class="py-3 px-4">{{ $lap->jenis_kerusakan ?? '-' }}</td>
+                                    <td class="py-3 px-4">{{ $lap->perangkat->nama_perangkat ?? '-' }}</td>
+                                    <td class="py-3 px-4">{{ $lap->jenisKerusakan->nama_kerusakan ?? '-' }}</td>
                                     <td class="py-3 px-4">
                                         @if(strtolower($lap->status ?? '') === 'selesai')
                                             <span class="bg-green-100 text-green-800 text-xs px-2.5 py-0.5 rounded-full font-medium">Selesai</span>
